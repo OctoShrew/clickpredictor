@@ -7,9 +7,10 @@ app = FastAPI()
 
 # this should of course be a post method but doesn't work for browser testing
 @app.get("/log_click", status_code=201)
-def log_click(user_click: int, session_id: str) -> Dict:
+def log_click(user_click: int, predicted_click: int, session_id: str) -> Dict:
     """
     user_click (int):  The click made by the user
+    predicted_click (int): The prediction made by the system
     session_id (str): The session_id 
 
     logs a user's most recent click to store in the database and returns the user's percentage and             standard_deviation
