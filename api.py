@@ -22,6 +22,7 @@ def log_click(user_click: int, predicted_click: int, session_id: str) -> Dict:
         # database.put(session_id, correct=1, incorrect=0)
     else:
         # database.put(session_id, correct=0, incorrect=1)
+        pass 
     
     # if session_id already exists, increment correct/incorrect by the respective value
     # if session_id is new, create a new line with correct/incorrect starting at 0
