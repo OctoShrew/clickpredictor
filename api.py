@@ -2,11 +2,16 @@ import json
 from fastapi import FastAPI
 import numpy as np
 from typing import Dict, List
+from db import create_connection,delete_db,check_session,update_session,insert_session
 app = FastAPI()
+database = r"clicks.db"
+
+# create a database connection
+conn = create_connection(database)
 
 
 # this should of course be a post method but doesn't work for browser testing
-@app.get("/log_click", status_code=201)
+#@app.get("/log_click", status_code=201)
 def log_click(user_click: int, predicted_click: int, session_id: str) -> Dict:
     """
     user_click (int):  The click made by the user
@@ -17,24 +22,24 @@ def log_click(user_click: int, predicted_click: int, session_id: str) -> Dict:
 
     returns {percentage: float, standard_deviation: float}
     """
-    if user_click == predicted_click:
-        pass
-        # database.put(session_id, correct=1, incorrect=0)
+    if check_session(conn,session_id):
+        update_session(conn,session_id,user_click == predicted_click)
     else:
-        # database.put(session_id, correct=0, incorrect=1)
-        pass 
-    
-    # if session_id already exists, increment correct/incorrect by the respective value
-    # if session_id is new, create a new line with correct/incorrect starting at 0
+        insert_session(conn, session_id,user_click == predicted_click)
+        
 
 
-@app.get("/get_data")
+#@app.get("/get_data")
 def get_data() -> List[float]:
     """
     returns a histogram of the performances achieved by users (based on the database) where each
     element contains the number of people having achieved a certain percentage
     """
-
+    temp_list=conn.execute("SELECT * FROM clicks").fetchall()
+    print("records-(session,correct,incorrect,percentage)",temp_list)
+    percentages=[i[3] for i in temp_list]
+    print("percentages",percentages)
+    
     dist = np.random.normal(loc=65, scale=10, size=10000)
     dist = dist[dist < 100]
     dist = dist[dist > 0]
@@ -44,3 +49,9 @@ def get_data() -> List[float]:
     bin_indexes = np.searchsorted(bins, dist)
     np.add.at(histogram, bin_indexes, 1)
     return list(histogram)
+    
+log_click(1,1,"1")
+log_click(1,1,"1")
+log_click(2,1,"2")
+get_data()
+    
