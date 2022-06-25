@@ -1,0 +1,30 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #181818;
+    color: #fff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.content-wrapper {
+    max-width: 700px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+#click-history {
+    height: 300px;
+    max-width: 400px;
+    overflow-y: auto;
+    list-style-type: none;
+    padding: 0;
+}
+
+body > footer {
+    width: 90%;
+    max-width: 700px;
+    margin: 75px auto 0;
+}
